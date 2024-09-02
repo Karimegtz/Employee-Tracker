@@ -1,19 +1,21 @@
+\c team_members
+
 INSERT INTO division
     (division_name)
 VALUES
     ('Marketing'),
-    ('Product Development'),
-    ('Human Resources'),
-    ('Compliance');
+    ('Research & Development'),
+    ('Human Capital'),
+    ('Regulatory Affairs');
 
-INSERT INTO position
-    (position_title, salary, division_id)
+INSERT INTO job
+    (job_title, job_salary, division_id)
 VALUES
-    ('Marketing Director', 85000, 1),
-    ('Marketing Coordinator', 45000, 1),
-    ('Product Manager', 95000, 2),
-    ('UX Designer', 72000, 2),
-    ('HR Manager', 78000, 3),
-    ('Recruiter', 52000, 3),
-    ('Compliance Officer', 65000, 4),
-    ('Legal Advisor', 70000, 4);
+    ('Head of Marketing', 85000, 1),
+    ('Marketing Associate', 45000, 1),
+    ('Product Owner', 95000, 2),
+    ('User Experience Designer', 72000, 2),
+    ('Human Capital Manager', 78000, 3),
+    ('Talent Acquisition Specialist', 52000, 3),
+    ('Regulatory Compliance Specialist', 65000, 4),
+    ('Corporate Legal Counsel', 70000, 4);
