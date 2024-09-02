@@ -1,21 +1,34 @@
+
 \c team_members
 
 INSERT INTO division
     (division_name)
 VALUES
     ('Marketing'),
-    ('Research & Development'),
-    ('Human Capital'),
-    ('Regulatory Affairs');
+    ('Product Development'),
+    ('Human Resources'),
+    ('Compliance');
 
 INSERT INTO job
     (job_title, job_salary, division_id)
 VALUES
-    ('Head of Marketing', 85000, 1),
-    ('Marketing Associate', 45000, 1),
-    ('Product Owner', 95000, 2),
-    ('User Experience Designer', 72000, 2),
-    ('Human Capital Manager', 78000, 3),
-    ('Talent Acquisition Specialist', 52000, 3),
-    ('Regulatory Compliance Specialist', 65000, 4),
-    ('Corporate Legal Counsel', 70000, 4);
+    ('Marketing Director', 95000, 1),
+    ('Marketing Coordinator', 55000, 1),
+    ('Product Manager', 105000, 2),
+    ('UX Designer', 75000, 2),
+    ('HR Manager', 85000, 3),
+    ('Recruiter', 60000, 3),
+    ('Compliance Officer', 70000, 4),
+    ('Legal Advisor', 90000, 4);
+
+INSERT INTO employee
+    (first_name, last_name, job_id, supervisor_id)
+VALUES
+    ('Alice', 'Johnson', 1, NULL),
+    ('Bob', 'Smith', 2, 1),
+    ('Charlie', 'Davis', 3, NULL),
+    ('Diana', 'Evans', 4, 3),
+    ('Eve', 'Martinez', 5, NULL),
+    ('Frank', 'Clark', 6, 5),
+    ('Grace', 'Taylor', 7, NULL),
+    ('Henry', 'Anderson', 8, 7);
