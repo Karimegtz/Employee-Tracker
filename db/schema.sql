@@ -1,5 +1,3 @@
-\c ecotrackers
-
 DROP DATABASE IF EXISTS team_members;
 CREATE DATABASE team_members;
 

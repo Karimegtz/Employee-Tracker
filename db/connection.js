@@ -4,7 +4,7 @@ const account = new account({
   host: 'localhost',
   user: 'postgres',
   password: 'refuGio4', 
-  database: 'infoWorker',
+  database: 'team_members',
   port: 5432 
 });
 

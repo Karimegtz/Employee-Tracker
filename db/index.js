@@ -1,130 +1,108 @@
 const account = require('./connection');
 
-class DB {
+class Database {
   constructor() {}
 
-  async query(sql, args = []) {
-    const user = await account.connect();
+  async executeQuery(sql, args = []) {
+    const client = await account.connect();
     try {
-      const result = await user.query(sql, args);
+      const result = await client.query(sql, args);
       return result;
     } finally {
-      user.release();
+      client.release();
     }
   }
 
-  
-
-  findAllEmployees() {
-    return this.query(
-      "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+  getAllEmployees() {
+    return this.executeQuery(
+      "SELECT employee.employee_id, employee.first_name, employee.last_name, job.job_title, division.division_name AS division, job.job_salary, CONCAT(supervisor.first_name, ' ', supervisor.last_name) AS supervisor FROM employee LEFT JOIN job on employee.job_id = job.job_id LEFT JOIN division on job.division_id = division.division_id LEFT JOIN employee supervisor on supervisor.employee_id = employee.supervisor_id;"
     );
   }
 
- 
-
-  findAllPossibleManagers(employeeId) {
-    return this.query(
-      'SELECT id, first_name, last_name FROM employee WHERE id != $1',
+  getAllPossibleSupervisors(employeeId) {
+    return this.executeQuery(
+      'SELECT employee_id, first_name, last_name FROM employee WHERE employee_id != $1',
       [employeeId]
     );
   }
 
-
-
-
-  createEmployee(employee) {
-    const { first_name, last_name, role_id, manager_id } = employee;
-    return this.query(
-      'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
-      [first_name, last_name, role_id, manager_id]
+  addEmployee(employee) {
+    const { first_name, last_name, job_id, supervisor_id } = employee;
+    return this.executeQuery(
+      'INSERT INTO employee (first_name, last_name, job_id, supervisor_id) VALUES ($1, $2, $3, $4)',
+      [first_name, last_name, job_id, supervisor_id]
     );
   }
 
-  
-  removeEmployee(employeeId) {
-    return this.query('DELETE FROM employee WHERE id = $1', [employeeId]);
+  deleteEmployee(employeeId) {
+    return this.executeQuery('DELETE FROM employee WHERE employee_id = $1', [employeeId]);
   }
 
-
-
-  updateEmployeeRole(employeeId, roleId) {
-    return this.query('UPDATE employee SET role_id = $1 WHERE id = $2', [
-      roleId,
+  updateEmployeeJob(employeeId, jobId) {
+    return this.executeQuery('UPDATE employee SET job_id = $1 WHERE employee_id = $2', [
+      jobId,
       employeeId,
     ]);
   }
 
-
-  updateEmployeeManager(employeeId, managerId) {
-    return this.query('UPDATE employee SET manager_id = $1 WHERE id = $2', [
-      managerId,
+  updateEmployeeSupervisor(employeeId, supervisorId) {
+    return this.executeQuery('UPDATE employee SET supervisor_id = $1 WHERE employee_id = $2', [
+      supervisorId,
       employeeId,
     ]);
   }
 
-
-  
-
-  findAllRoles() {
-    return this.query(
-      'SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;'
+  getAllJobs() {
+    return this.executeQuery(
+      'SELECT job.job_id, job.job_title, division.division_name AS division, job.job_salary FROM job LEFT JOIN division on job.division_id = division.division_id;'
     );
   }
 
-  createRole(role) {
-    const { title, salary, department_id } = role;
-    return this.query(
-      'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)',
-      [title, salary, department_id]
+  addJob(job) {
+    const { job_title, job_salary, division_id } = job;
+    return this.executeQuery(
+      'INSERT INTO job (job_title, job_salary, division_id) VALUES ($1, $2, $3)',
+      [job_title, job_salary, division_id]
     );
   }
 
-  
-  
-  removeRole(roleId) {
-    return this.query('DELETE FROM role WHERE id = $1', [roleId]);
-  }
-  findAllDepartments() {
-    return this.query('SELECT department.id, department.name FROM department;');
+  deleteJob(jobId) {
+    return this.executeQuery('DELETE FROM job WHERE job_id = $1', [jobId]);
   }
 
+  getAllDivisions() {
+    return this.executeQuery('SELECT division.division_id, division.division_name FROM division;');
+  }
 
-  viewDepartmentBudgets() {
-    return this.query(
-      'SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;'
+  viewDivisionBudgets() {
+    return this.executeQuery(
+      'SELECT division.division_id, division.division_name, SUM(job.job_salary) AS utilized_budget FROM employee LEFT JOIN job on employee.job_id = job.job_id LEFT JOIN division on job.division_id = division.division_id GROUP BY division.division_id, division.division_name;'
     );
   }
 
-  createDepartment(department) {
-    return this.query('INSERT INTO department (name) VALUES ($1)', [
-      department.name,
+  addDivision(division) {
+    return this.executeQuery('INSERT INTO division (division_name) VALUES ($1)', [
+      division.division_name,
     ]);
   }
 
- 
-
-  removeDepartment(departmentId) {
-    return this.query('DELETE FROM department WHERE id = $1', [departmentId]);
+  deleteDivision(divisionId) {
+    return this.executeQuery('DELETE FROM division WHERE division_id = $1', [divisionId]);
   }
 
-
-
-  findAllEmployeesByDepartment(departmentId) {
-    return this.query(
-      'SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = $1;',
-      [departmentId]
+  getAllEmployeesByDivision(divisionId) {
+    return this.executeQuery(
+      'SELECT employee.employee_id, employee.first_name, employee.last_name, job.job_title FROM employee LEFT JOIN job on employee.job_id = job.job_id LEFT JOIN division division on job.division_id = division.division_id WHERE division.division_id = $1;',
+      [divisionId]
     );
   }
 
-
-  
-  findAllEmployeesByManager(managerId) {
-    return this.query(
-      'SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = $1;',
-      [managerId]
+  getAllEmployeesBySupervisor(supervisorId) {
+    return this.executeQuery(
+      'SELECT employee.employee_id, employee.first_name, employee.last_name, division.division_name AS division, job.job_title FROM employee LEFT JOIN job on job.job_id = employee.job_id LEFT JOIN division ON division.division_id = job.division_id WHERE supervisor_id = $1;',
+      [supervisorId]
     );
   }
 }
 
-module.exports = new DB();
+module.exports = new Database();
