@@ -1,33 +1,19 @@
-\c employees
-
-INSERT INTO department
-    (name)
+INSERT INTO division
+    (division_name)
 VALUES
-    ('Sales'),
-    ('Engineering'),
-    ('Finance'),
-    ('Legal');
+    ('Marketing'),
+    ('Product Development'),
+    ('Human Resources'),
+    ('Compliance');
 
-INSERT INTO role
-    (title, salary, department_id)
+INSERT INTO position
+    (position_title, salary, division_id)
 VALUES
-    ('Sales Lead', 65765, 1),
-    ('Salesperson', 56756, 1),
-    ('Lead Engineer', 15788, 2),
-    ('Software Engineer', 454654, 2),
-    ('Account Manager', 87686, 3),
-    ('Accountant', 47657575, 3),
-    ('Legal Team Lead', 65767567, 4),
-    ('Lawyer', 45777, 4);
-
-INSERT INTO employee
-    (first_name, last_name, role_id, manager_id)
-VALUES
-    ('flavio', 'mtx', 1, NULL),
-    ('Alondra', 'rda', 2, 1),
-    ('Chuy', 'perez', 3, NULL),
-    ('Ilemda    ', 'Glx', 4, 3),
-    ('Sofi', 'Torres', 5, NULL),
-    ('Josema', 'Cortes', 6, 5),
-    ('Pedro', 'Gtz', 7, NULL),
-    ('Mari', 'Heredia', 8, 7);
+    ('Marketing Director', 85000, 1),
+    ('Marketing Coordinator', 45000, 1),
+    ('Product Manager', 95000, 2),
+    ('UX Designer', 72000, 2),
+    ('HR Manager', 78000, 3),
+    ('Recruiter', 52000, 3),
+    ('Compliance Officer', 65000, 4),
+    ('Legal Advisor', 70000, 4);

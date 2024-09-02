@@ -24,7 +24,7 @@ Employee Tracker is a command-line application built with Node.js, Inquirer, and
    cd Employee-Tracker
 3. Install the required dependencies:
    ```bash
-   npm install
+  npm install
 4. Set up the PostgreSQL database using the provided schema and seed data.
 
 ## Usage

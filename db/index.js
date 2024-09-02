@@ -1,15 +1,15 @@
-const pool = require('./connection');
+const account = require('./connection');
 
 class DB {
   constructor() {}
 
   async query(sql, args = []) {
-    const client = await pool.connect();
+    const user = await account.connect();
     try {
-      const result = await client.query(sql, args);
+      const result = await user.query(sql, args);
       return result;
     } finally {
-      client.release();
+      user.release();
     }
   }
 
